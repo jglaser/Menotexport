@@ -108,7 +108,7 @@ def exportAnno(annodict,outdir,action,verbose=True):
             citedictii=annodict[tagii]
             outstr='''\n\n{0}\n# {1}'''.format(int(80)*'-', conv(tagii))
             outstr=outstr.encode('ascii','replace')
-            fout.write(outstr)
+            fout.write(str(outstr))
 
             #--------------Loop through cite keys--------------
             for citejj, annosjj in list(citedictii.items()):
@@ -117,7 +117,7 @@ def exportAnno(annodict,outdir,action,verbose=True):
 
                 outstr='''\n\n\t@{0}:'''.format(conv(citejj))
                 outstr=outstr.encode('ascii','replace')
-                fout.write(outstr)
+                fout.write(str(outstr))
 
                 #-----------------Write highlights-----------------
                 if len(hljj)>0:
@@ -134,7 +134,7 @@ def exportAnno(annodict,outdir,action,verbose=True):
                       hlkk.ctime])))
 
                         outstr=outstr.encode('ascii','replace')
-                        fout.write(outstr)
+                        fout.write(str(outstr))
 
                 #-----------------Write notes-----------------
                 if len(ntjj)>0:
@@ -151,7 +151,7 @@ def exportAnno(annodict,outdir,action,verbose=True):
                     ntkk.ctime])))
 
                         outstr=outstr.encode('ascii','replace')
-                        fout.write(outstr)
+                        fout.write(str(outstr))
 
         
 
