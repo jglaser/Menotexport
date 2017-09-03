@@ -1113,7 +1113,7 @@ def processFolder(db,outdir,annotations,folderid,foldername,allfolders,action,\
 
     return exportfaillist,annofaillist,bibfaillist,risfaillist
 
-    
+
 def processCanonicals(db,outdir,annotations,docids,allfolders,action,\
         separate,iszotero,verbose):
     '''Process files/docs in a folder.
@@ -1128,7 +1128,7 @@ def processCanonicals(db,outdir,annotations,docids,allfolders,action,\
     <separate>: bool, whether save one output for each file or all files.
     <iszotero>: bool, whether exported .bib is reformated to cater to zotero import or not.
     '''
-    
+
     exportfaillist=[]
     annofaillist=[]
     bibfaillist=[]
@@ -1173,7 +1173,7 @@ def processCanonicals(db,outdir,annotations,docids,allfolders,action,\
             flist=exportpdf.exportAnnoPdf(annotations,\
                     outdir_folder,verbose)
             exportfaillist.extend(flist)
-    
+
         #--------Copy other PDFs to target location--------
         if len(otherdocs)>0:
             if verbose:

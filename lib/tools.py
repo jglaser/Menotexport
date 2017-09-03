@@ -10,13 +10,15 @@ import re
 
 def deu(text):
     if isinstance(text,str):
-        return text.decode('utf8','replace')
+#        return text.decode('utf8','replace')
+        return text
     else:
         return text
 
 def enu(text):
     if isinstance(text,str):
-        return text.encode('utf8','replace')
+#        return text
+        return text
     else:
         return text
 
