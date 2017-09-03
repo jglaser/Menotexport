@@ -304,7 +304,7 @@ Developed in python2.7. **NOT** compatible with python3+ (*pdfminer* doesn't sup
     - PyPDF2
     - sqlite3
     - pandas (0.16 or later)
-    - pdfminer (NOTE: version 2014+ is needed, the one in the Ubuntu repository has been out of date at the time of writing. Please check to make sure. If you get an error of "ImportError: No module named pdfdocument", you probably got an older version.)
+    - pdfminer (NOTE: version 2014+ is needed, the one in the Ubuntu repository has been out of date at the time of writing. Please check to make sure. If you get an error of "ImportError: No module named pdfdocument", you probably got an older version.). With python 3, use pdfminer.six
     - numpy
     - BeautifulSoup4
 
