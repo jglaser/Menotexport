@@ -14,8 +14,8 @@ Update time: 2016-04-12 22:09:38.
 import os
 import shutil
 import PyPDF2
-import pdfannotation
-from tools import printHeader, printInd, printNumHeader
+from . import pdfannotation
+from .tools import printHeader, printInd, printNumHeader
 
 
 
@@ -105,13 +105,13 @@ def exportPdf(fin,outdir,annotations,verbose):
             inpdf._override_encryption = True
             inpdf._flatten()
     except IOError:
-        print('Could not find pdf file %s' %fin)
+        print(('Could not find pdf file %s' %fin))
         return
 
     outpdf = PyPDF2.PdfFileWriter()
 
     #----------------Loop through pages----------------
-    pages=range(1,inpdf.getNumPages()+1)
+    pages=list(range(1,inpdf.getNumPages()+1))
 
     for pii in pages:
 

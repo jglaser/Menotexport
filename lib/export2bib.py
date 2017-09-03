@@ -13,9 +13,9 @@ Update time: 2016-06-22 16:25:15.
 
 import os
 import platform
-import tools
+from . import tools
 import re
-from pylatexenc import latexencode
+from .pylatexenc import latexencode
 
 import logging
 logging.basicConfig()
@@ -77,7 +77,7 @@ def parseMeta(metadict,basedir,isfile,iszotero,verbose=True):
 
     #--------------------Get header--------------------
     doctype=getField(metadict,'type','article')
-    if doctype==u'JournalArticle':
+    if doctype=='JournalArticle':
         doctype='article'  #Necessary?
     citekey=getField(metadict,'citationkey','citationkey')
 
@@ -99,7 +99,7 @@ def parseMeta(metadict,basedir,isfile,iszotero,verbose=True):
     #--------------Populate other fields--------------
     gotkeywords=False
 
-    for kk,vv in metadict.items():
+    for kk,vv in list(metadict.items()):
         if vv is None:
             continue
         if kk in ['type','firstnames','lastname','docid']:
@@ -144,7 +144,7 @@ def parseMeta(metadict,basedir,isfile,iszotero,verbose=True):
             if type(tags) is not list:
                 tags=[tags,]
             keywords.extend(tags)
-	    keywords=list(set(keywords))
+            keywords=list(set(keywords))
             fieldvv=[latexencode.utf8tolatex(ii) for ii in keywords]
             kk='keywords'
             gotkeywords=True
@@ -161,14 +161,14 @@ def parseMeta(metadict,basedir,isfile,iszotero,verbose=True):
                     entries.append(entrykk)
             else:
                 fieldvv=['{ %s }' %ii for ii in fieldvv]
-                fieldvv=u', '.join(fieldvv)
+                fieldvv=', '.join(fieldvv)
                 entrykk='%s = {%s}' %(kk, fieldvv)
                 entries.append(entrykk)
 
         #--------------------All others--------------------
         else:
             if type(fieldvv) is list:
-                fieldvv=u', '.join(fieldvv)
+                fieldvv=', '.join(fieldvv)
             entrykk='%s = {%s}' %(kk, fieldvv)
             entries.append(entrykk)
 
@@ -192,7 +192,7 @@ def exportAnno2Bib(annodict,basedir,outdir,allfolders,isfile,iszotero,verbose=Tr
     #----------------Loop through docs----------------
     doclist=[]
 
-    for idii,annoii in annodict.items():
+    for idii,annoii in list(annodict.items()):
         metaii=annoii.meta
         hlii=annoii.highlights
         ntii=annoii.notes
@@ -243,7 +243,7 @@ def exportDoc2Bib(doclist,basedir,outdir,allfolders,isfile,iszotero,verbose=True
     for docii in doclist:
         bibdata=parseMeta(docii,basedir,isfile,iszotero)
         with open(abpath_out, mode='a') as fout:
-            fout.write(bibdata)
+            fout.write(str(bibdata))
         #faillist.append(docii['title'])
 
     return faillist

@@ -818,13 +818,13 @@ utf82latex={
 
 
 def utf8tolatex(s, non_ascii_only=False, brackets=True, substitute_bad_chars=False):
-    s = unicode(s); # make sure s is unicode
+    s = str(s); # make sure s is unicode
     s = unicodedata.normalize('NFC', s);
 
     if not s:
         return ""
 
-    result = u""
+    result = ""
     for ch in s:
         #log.longdebug("Encoding char %r", ch)
         if (non_ascii_only and ord(ch) < 127):
@@ -842,7 +842,7 @@ def utf8tolatex(s, non_ascii_only=False, brackets=True, substitute_bad_chars=Fal
                 result += ch
             else:
                 # non-ascii char
-                log.warning(u"Character cannot be encoded into LaTeX: U+%04X - `%s'" % (ord(ch), ch))
+                log.warning("Character cannot be encoded into LaTeX: U+%04X - `%s'" % (ord(ch), ch))
                 if (substitute_bad_chars):
                     result += r'{\bfseries ?}'
                 else:
@@ -873,20 +873,20 @@ if __name__ == '__main__':
 
         import fileinput
 
-        print "Please type some unicode text (Ctrl+D twice to stop) ..."
+        print("Please type some unicode text (Ctrl+D twice to stop) ...")
 
         latex = ''
         for line in fileinput.input():
             latex += line;
 
-        print '\n--- LATEX ---\n'
-        print utf8tolatex(latex.decode('utf-8')).encode('utf-8')
-        print '\n-------------\n'
+        print('\n--- LATEX ---\n')
+        print(utf8tolatex(latex.decode('utf-8')).encode('utf-8'))
+        print('\n-------------\n')
 
     except:
         import pdb;
         import sys;
-        print "\nEXCEPTION: " + unicode(sys.exc_info()[1]) + "\n"
+        print("\nEXCEPTION: " + str(sys.exc_info()[1]) + "\n")
         pdb.post_mortem()
 
 

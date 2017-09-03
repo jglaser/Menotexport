@@ -43,8 +43,8 @@ if sys.version_info[0]>=3:
     from urllib.parse import urlparse
 else:
     #--------------------Python2.7--------------------
-    from urllib import unquote
-    from urlparse import urlparse
+    from urllib.parse import unquote
+    from urllib.parse import urlparse
 
 
 #-------Fetch a column from pandas dataframe-------
@@ -72,7 +72,7 @@ class FileAnno(object):
         if highlights is None:
             self.hlpages=[]
         elif type(highlights) is dict:
-            self.hlpages=highlights.keys()
+            self.hlpages=list(highlights.keys())
             self.hlpages.sort()
         elif type(highlights) is list:
             self.hlpages=[ii.page for ii in highlights]
@@ -83,7 +83,7 @@ class FileAnno(object):
         if notes is None:
             self.ntpages=[]
         elif type(notes) is dict:
-            self.ntpages=notes.keys()
+            self.ntpages=list(notes.keys())
             self.ntpages.sort()
         elif type(notes) is list:
             self.ntpages=[ii.page for ii in notes]
@@ -106,18 +106,18 @@ def converturl2abspath(url):
     '''
 
     #--------------------For linux--------------------
-    path = unquote(str(urlparse(url).path)).decode("utf8") 
+    path = unquote(str(urlparse(url).path))
     path=os.path.abspath(path)
 
     if os.path.exists(path):
         return path
     else:
         #-------------------For windowes-------------------
-        if url[5:8]==u'///':   
-            url=u'file://'+url[8:]
+        if url[5:8]=='///':   
+            url='file://'+url[8:]
             path=urlparse(url)
             path=os.path.join(path.netloc,path.path)
-            path=unquote(str(path)).decode('utf8')
+            path=unquote(str(path))
             path=os.path.abspath(path)
             return path
 
@@ -338,11 +338,11 @@ def getHighlights(db,results=None,folderid=None,foldername=None,filterdocid=None
 
     #------------------Get highlights------------------
     try:
-	ret = db.execute(query_new)
-	hascolor=True
+        ret = db.execute(query_new)
+        hascolor=True
     except:
-	ret = db.execute(query_old)
-	hascolor=False
+        ret = db.execute(query_old)
+        hascolor=False
 
     for ii,r in enumerate(ret):
         pth = converturl2abspath(r[0])
@@ -655,7 +655,7 @@ def reformatAnno(annodict):
     Return <annos>: dict, keys: documentId; value: FileAnno objs.
     '''
     result={}
-    for kk,vv in annodict.items():
+    for kk,vv in list(annodict.items()):
         annoii=FileAnno(kk,vv['meta'],\
             highlights=vv.get('highlights',{}),\
             notes=vv.get('notes',{}))
@@ -914,7 +914,7 @@ def getFolderTree(df,folderid,verbose=True):
             break
         else:
             pfolder=getFolderName(df,pid)
-            folder=u'%s/%s' %(pfolder,folder)
+            folder='%s/%s' %(pfolder,folder)
         cid=pid
 
     return folderid,folder
@@ -928,7 +928,7 @@ def extractAnnos(annotations,action,verbose):
 
     #-----------Loop through documents---------------
     num=len(annotations)
-    docids=annotations.keys()
+    docids=list(annotations.keys())
     for ii,idii in enumerate(docids):
         annoii=annotations[idii]
         fii=annoii.path
@@ -942,15 +942,15 @@ def extractAnnos(annotations,action,verbose):
             from lib import extracthl2
 
             try:
-	        #------ Check if pdftotext is available--------
-	        if extracthl2.checkPdftotext():
-		    if verbose:
-			printInd('Retrieving highlights using pdftotext ...',4,prefix='# <Menotexport>:')
-                    hltexts=extracthl2.extractHighlights2(fii,annoii,verbose)
-	        else:
-		    if verbose:
-			printInd('Retrieving highlights using pdfminer ...',4,prefix='# <Menotexport>:')
-                    hltexts=extracthl2.extractHighlights(fii,annoii,verbose)
+                #------ Check if pdftotext is available--------
+                if extracthl2.checkPdftotext():
+                    if verbose:
+                        printInd('Retrieving highlights using pdftotext ...',4,prefix='# <Menotexport>:')
+                        hltexts=extracthl2.extractHighlights2(fii,annoii,verbose)
+                else:
+                    if verbose:
+                        printInd('Retrieving highlights using pdfminer ...',4,prefix='# <Menotexport>:')
+                        hltexts=extracthl2.extractHighlights(fii,annoii,verbose)
             except:
                 faillist.append(fnameii)
                 hltexts=[]
@@ -1020,7 +1020,7 @@ def processFolder(db,outdir,annotations,folderid,foldername,allfolders,action,\
         annotations=reformatAnno(annotations)
 
     #------Get other docs without annotations------
-    otherdocs=getOtherDocs(db,folderid,foldername,annotations.keys())
+    otherdocs=getOtherDocs(db,folderid,foldername,list(annotations.keys()))
 
     #--------Make subdir using folder name--------
     outdir_folder=os.path.join(outdir,foldername)
@@ -1158,7 +1158,7 @@ def processCanonicals(db,outdir,annotations,docids,allfolders,action,\
         annotations=reformatAnno(annotations)
 
     #------Get other docs without annotations------
-    otherdocs=getOtherCanonicalDocs(db,docids,annotations.keys())
+    otherdocs=getOtherCanonicalDocs(db,docids,list(annotations.keys()))
 
     #--------Make subdir using folder name--------
     outdir_folder=os.path.join(outdir,'Canonical-My library')

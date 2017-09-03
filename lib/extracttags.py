@@ -11,7 +11,7 @@ Update time: 2016-02-23 23:04:09.
 
 import os
 from textwrap import TextWrapper
-from tools import printHeader, printInd, printNumHeader
+from .tools import printHeader, printInd, printNumHeader
     
 
 
@@ -25,7 +25,7 @@ def groupByTags(annodict,verbose=True):
     tags={}
 
     #----------------Loop through files----------------
-    for idii,annoii in annodict.items():
+    for idii,annoii in list(annodict.items()):
 
         hlii=annoii.highlights
         ntii=annoii.notes
@@ -77,7 +77,7 @@ def exportAnno(annodict,outdir,action,verbose=True):
         printHeader('Exporting all taged annotations to:',3)
         printInd(abpath_out,4)
 
-    conv=lambda x:unicode(x)
+    conv=lambda x:str(x)
 
     wrapper=TextWrapper()
     wrapper.width=70
@@ -94,7 +94,7 @@ def exportAnno(annodict,outdir,action,verbose=True):
     with open(abpath_out, mode='a') as fout:
 
         #----------------Loop through tags----------------
-        tags=annodict.keys()
+        tags=list(annodict.keys())
         if len(tags)==0:
             return
         tags.sort()
@@ -106,16 +106,16 @@ def exportAnno(annodict,outdir,action,verbose=True):
         for tagii in tags:
 
             citedictii=annodict[tagii]
-            outstr=u'''\n\n{0}\n# {1}'''.format(int(80)*'-', conv(tagii))
+            outstr='''\n\n{0}\n# {1}'''.format(int(80)*'-', conv(tagii))
             outstr=outstr.encode('ascii','replace')
             fout.write(outstr)
 
             #--------------Loop through cite keys--------------
-            for citejj, annosjj in citedictii.items():
+            for citejj, annosjj in list(citedictii.items()):
                 hljj=annosjj['highlights']
                 ntjj=annosjj['notes']
 
-                outstr=u'''\n\n\t@{0}:'''.format(conv(citejj))
+                outstr='''\n\n\t@{0}:'''.format(conv(citejj))
                 outstr=outstr.encode('ascii','replace')
                 fout.write(outstr)
 
@@ -126,12 +126,12 @@ def exportAnno(annodict,outdir,action,verbose=True):
                     for hlkk in hljj:
                         hlstr=wrapper.fill(hlkk.text)
                         title=wrapper2.fill(hlkk.title)
-                        outstr=u'''
+                        outstr='''
 \n\t\t> {0}
 
 \t\t\t- Title: {1}
-\t\t\t- Ctime: {2}'''.format(*map(conv,[hlstr, title,\
-                      hlkk.ctime]))
+\t\t\t- Ctime: {2}'''.format(*list(map(conv,[hlstr, title,\
+                      hlkk.ctime])))
 
                         outstr=outstr.encode('ascii','replace')
                         fout.write(outstr)
@@ -143,12 +143,12 @@ def exportAnno(annodict,outdir,action,verbose=True):
                     for ntkk in ntjj:
                         ntstr=wrapper.fill(ntkk.text)
                         title=wrapper2.fill(ntkk.title)
-                        outstr=u'''
+                        outstr='''
 \n\t\t- {0}
 
 \t\t\t- Title: {1}
-\t\t\t- Ctime: {2}'''.format(*map(conv,[ntstr, title,\
-                    ntkk.ctime]))
+\t\t\t- Ctime: {2}'''.format(*list(map(conv,[ntstr, title,\
+                    ntkk.ctime])))
 
                         outstr=outstr.encode('ascii','replace')
                         fout.write(outstr)

@@ -26,7 +26,7 @@
 import os
 import re
 import unicodedata
-import latexwalker
+from . import latexwalker
 import logging
 
 
@@ -118,26 +118,26 @@ _default_macro_list = [
 
     ('texorpdfstring', lambda node: latexnodes2text(node.nodeargs[1:2])), # use second argument
 
-    ('oe', u'\u0153'),
-    ('OE', u'\u0152'),
-    ('ae', u'\u00e6'),
-    ('AE', u'\u00c6'),
-    ('aa', u'\u00e5'), # a norvegien/nordique
-    ('AA', u'\u00c5'), # A norvegien/nordique
-    ('o', u'\u00f8'), # o norvegien/nordique
-    ('O', u'\u00d8'), # O norvegien/nordique
-    ('ss', u'\u00df'), # s-z allemand
-    ('L', u"\N{LATIN CAPITAL LETTER L WITH STROKE}"),
-    ('l', u"\N{LATIN SMALL LETTER L WITH STROKE}"),
-    ('i', u"\N{LATIN SMALL LETTER DOTLESS I}"),
-    ('j', u"\N{LATIN SMALL LETTER DOTLESS J}"),
+    ('oe', '\u0153'),
+    ('OE', '\u0152'),
+    ('ae', '\u00e6'),
+    ('AE', '\u00c6'),
+    ('aa', '\u00e5'), # a norvegien/nordique
+    ('AA', '\u00c5'), # A norvegien/nordique
+    ('o', '\u00f8'), # o norvegien/nordique
+    ('O', '\u00d8'), # O norvegien/nordique
+    ('ss', '\u00df'), # s-z allemand
+    ('L', "\N{LATIN CAPITAL LETTER L WITH STROKE}"),
+    ('l', "\N{LATIN SMALL LETTER L WITH STROKE}"),
+    ('i', "\N{LATIN SMALL LETTER DOTLESS I}"),
+    ('j', "\N{LATIN SMALL LETTER DOTLESS J}"),
 
     ("~", "~" ),
     ("&", "\\&" ), # HACK, see below for text replacement of '&'
     ("$", "$" ),
     ("{", "{" ),
     ("}", "}" ),
-    ("%", lambda arg: u"%" ), # careful: % is formatting substituion symbol...
+    ("%", lambda arg: "%" ), # careful: % is formatting substituion symbol...
     ("#", "#" ),
     ("_", "_" ),
 
@@ -145,106 +145,106 @@ _default_macro_list = [
 
     ("textquoteleft", "`"),
     ("textquoteright", "'"),
-    ("textquotedblright", u"\N{RIGHT DOUBLE QUOTATION MARK}"),
-    ("textquotedblleft", u"\N{LEFT DOUBLE QUOTATION MARK}"),
-    ("textendash", u"\N{EN DASH}"),
-    ("textemdash", u"\N{EM DASH}"),
+    ("textquotedblright", "\N{RIGHT DOUBLE QUOTATION MARK}"),
+    ("textquotedblleft", "\N{LEFT DOUBLE QUOTATION MARK}"),
+    ("textendash", "\N{EN DASH}"),
+    ("textemdash", "\N{EM DASH}"),
 
-    ('textpm', u"\N{PLUS-MINUS SIGN}"),
-    ('textmp', u"\N{MINUS-OR-PLUS SIGN}"),
+    ('textpm', "\N{PLUS-MINUS SIGN}"),
+    ('textmp', "\N{MINUS-OR-PLUS SIGN}"),
 
-    ("texteuro", u"\N{EURO SIGN}"),
+    ("texteuro", "\N{EURO SIGN}"),
 
     # math stuff
 
-    ("hbar", u"\N{LATIN SMALL LETTER H WITH STROKE}"),
-    ("ell", u"\N{SCRIPT SMALL L}"),
+    ("hbar", "\N{LATIN SMALL LETTER H WITH STROKE}"),
+    ("ell", "\N{SCRIPT SMALL L}"),
 
-    ('forall', u"\N{FOR ALL}"),
-    ('complement', u"\N{COMPLEMENT}"),
-    ('partial', u"\N{PARTIAL DIFFERENTIAL}"),
-    ('exists', u"\N{THERE EXISTS}"),
-    ('nexists', u"\N{THERE DOES NOT EXIST}"),
-    ('varnothing', u"\N{EMPTY SET}"),
-    ('emptyset', u"\N{EMPTY SET}"),
+    ('forall', "\N{FOR ALL}"),
+    ('complement', "\N{COMPLEMENT}"),
+    ('partial', "\N{PARTIAL DIFFERENTIAL}"),
+    ('exists', "\N{THERE EXISTS}"),
+    ('nexists', "\N{THERE DOES NOT EXIST}"),
+    ('varnothing', "\N{EMPTY SET}"),
+    ('emptyset', "\N{EMPTY SET}"),
     # increment?
-    ('nabla', u"\N{NABLA}"),
+    ('nabla', "\N{NABLA}"),
     #
-    ('in', u"\N{ELEMENT OF}"),
-    ('notin', u"\N{NOT AN ELEMENT OF}"),
-    ('ni', u"\N{CONTAINS AS MEMBER}"),
-    ('prod', u'\N{N-ARY PRODUCT}'),
-    ('coprod', u'\N{N-ARY COPRODUCT}'),
-    ('sum', u'\N{N-ARY SUMMATION}'),
-    ('setminus', u'\N{SET MINUS}'),
-    ('smallsetminus', u'\N{SET MINUS}'),
-    ('ast', u'\N{ASTERISK OPERATOR}'),
-    ('circ', u'\N{RING OPERATOR}'),
-    ('bullet', u'\N{BULLET OPERATOR}'),
-    ('sqrt', u'\N{SQUARE ROOT}(%s)'),
-    ('propto', u'\N{PROPORTIONAL TO}'),
-    ('infty', u'\N{INFINITY}'),
-    ('parallel', u'\N{PARALLEL TO}'),
-    ('nparallel', u'\N{NOT PARALLEL TO}'),
-    ('wedge', u"\N{LOGICAL AND}"),
-    ('vee', u"\N{LOGICAL OR}"),
-    ('cap', u'\N{INTERSECTION}'),
-    ('cup', u'\N{UNION}'),
-    ('int', u'\N{INTEGRAL}'),
-    ('iint', u'\N{DOUBLE INTEGRAL}'),
-    ('iiint', u'\N{TRIPLE INTEGRAL}'),
-    ('oint', u'\N{CONTOUR INTEGRAL}'),
+    ('in', "\N{ELEMENT OF}"),
+    ('notin', "\N{NOT AN ELEMENT OF}"),
+    ('ni', "\N{CONTAINS AS MEMBER}"),
+    ('prod', '\N{N-ARY PRODUCT}'),
+    ('coprod', '\N{N-ARY COPRODUCT}'),
+    ('sum', '\N{N-ARY SUMMATION}'),
+    ('setminus', '\N{SET MINUS}'),
+    ('smallsetminus', '\N{SET MINUS}'),
+    ('ast', '\N{ASTERISK OPERATOR}'),
+    ('circ', '\N{RING OPERATOR}'),
+    ('bullet', '\N{BULLET OPERATOR}'),
+    ('sqrt', '\N{SQUARE ROOT}(%s)'),
+    ('propto', '\N{PROPORTIONAL TO}'),
+    ('infty', '\N{INFINITY}'),
+    ('parallel', '\N{PARALLEL TO}'),
+    ('nparallel', '\N{NOT PARALLEL TO}'),
+    ('wedge', "\N{LOGICAL AND}"),
+    ('vee', "\N{LOGICAL OR}"),
+    ('cap', '\N{INTERSECTION}'),
+    ('cup', '\N{UNION}'),
+    ('int', '\N{INTEGRAL}'),
+    ('iint', '\N{DOUBLE INTEGRAL}'),
+    ('iiint', '\N{TRIPLE INTEGRAL}'),
+    ('oint', '\N{CONTOUR INTEGRAL}'),
 
-    ('sim', u'\N{TILDE OPERATOR}'),
-    ('backsim', u'\N{REVERSED TILDE}'),
-    ('simeq', u'\N{ASYMPTOTICALLY EQUAL TO}'),
-    ('approx', u'\N{ALMOST EQUAL TO}'),
-    ('neq', u'\N{NOT EQUAL TO}'),
-    ('equiv', u'\N{IDENTICAL TO}'),
-    ('ge', u'>'),#
-    ('le', u'<'),#
-    ('leq', u'\N{LESS-THAN OR EQUAL TO}'),
-    ('geq', u'\N{GREATER-THAN OR EQUAL TO}'),
-    ('leqslant', u'\N{LESS-THAN OR EQUAL TO}'),
-    ('geqslant', u'\N{GREATER-THAN OR EQUAL TO}'),
-    ('leqq', u'\N{LESS-THAN OVER EQUAL TO}'),
-    ('geqq', u'\N{GREATER-THAN OVER EQUAL TO}'),
-    ('lneqq', u'\N{LESS-THAN BUT NOT EQUAL TO}'),
-    ('gneqq', u'\N{GREATER-THAN BUT NOT EQUAL TO}'),
-    ('ll', u'\N{MUCH LESS-THAN}'),
-    ('gg', u'\N{MUCH GREATER-THAN}'),
-    ('nless', u'\N{NOT LESS-THAN}'),
-    ('ngtr', u'\N{NOT GREATER-THAN}'),
-    ('nleq', u'\N{NEITHER LESS-THAN NOR EQUAL TO}'),
-    ('ngeq', u'\N{NEITHER GREATER-THAN NOR EQUAL TO}'),
-    ('lesssim', u'\N{LESS-THAN OR EQUIVALENT TO}'),
-    ('gtrsim', u'\N{GREATER-THAN OR EQUIVALENT TO}'),
-    ('lessgtr', u'\N{LESS-THAN OR GREATER-THAN}'),
-    ('gtrless', u'\N{GREATER-THAN OR LESS-THAN}'),
-    ('prec', u'\N{PRECEDES}'),
-    ('succ', u'\N{SUCCEEDS}'),
-    ('preceq', u'\N{PRECEDES OR EQUAL TO}'),
-    ('succeq', u'\N{SUCCEEDS OR EQUAL TO}'),
-    ('precsim', u'\N{PRECEDES OR EQUIVALENT TO}'),
-    ('succsim', u'\N{SUCCEEDS OR EQUIVALENT TO}'),
-    ('nprec', u'\N{DOES NOT PRECEDE}'),
-    ('nsucc', u'\N{DOES NOT SUCCEED}'),
-    ('subset', u'\N{SUBSET OF}'),
-    ('supset', u'\N{SUPERSET OF}'),
-    ('subseteq', u'\N{SUBSET OF OR EQUAL TO}'),
-    ('supseteq', u'\N{SUPERSET OF OR EQUAL TO}'),
-    ('nsubseteq', u'\N{NEITHER A SUBSET OF NOR EQUAL TO}'),
-    ('nsupseteq', u'\N{NEITHER A SUPERSET OF NOR EQUAL TO}'),
-    ('subsetneq', u'\N{SUBSET OF WITH NOT EQUAL TO}'),
-    ('supsetneq', u'\N{SUPERSET OF WITH NOT EQUAL TO}'),
+    ('sim', '\N{TILDE OPERATOR}'),
+    ('backsim', '\N{REVERSED TILDE}'),
+    ('simeq', '\N{ASYMPTOTICALLY EQUAL TO}'),
+    ('approx', '\N{ALMOST EQUAL TO}'),
+    ('neq', '\N{NOT EQUAL TO}'),
+    ('equiv', '\N{IDENTICAL TO}'),
+    ('ge', '>'),#
+    ('le', '<'),#
+    ('leq', '\N{LESS-THAN OR EQUAL TO}'),
+    ('geq', '\N{GREATER-THAN OR EQUAL TO}'),
+    ('leqslant', '\N{LESS-THAN OR EQUAL TO}'),
+    ('geqslant', '\N{GREATER-THAN OR EQUAL TO}'),
+    ('leqq', '\N{LESS-THAN OVER EQUAL TO}'),
+    ('geqq', '\N{GREATER-THAN OVER EQUAL TO}'),
+    ('lneqq', '\N{LESS-THAN BUT NOT EQUAL TO}'),
+    ('gneqq', '\N{GREATER-THAN BUT NOT EQUAL TO}'),
+    ('ll', '\N{MUCH LESS-THAN}'),
+    ('gg', '\N{MUCH GREATER-THAN}'),
+    ('nless', '\N{NOT LESS-THAN}'),
+    ('ngtr', '\N{NOT GREATER-THAN}'),
+    ('nleq', '\N{NEITHER LESS-THAN NOR EQUAL TO}'),
+    ('ngeq', '\N{NEITHER GREATER-THAN NOR EQUAL TO}'),
+    ('lesssim', '\N{LESS-THAN OR EQUIVALENT TO}'),
+    ('gtrsim', '\N{GREATER-THAN OR EQUIVALENT TO}'),
+    ('lessgtr', '\N{LESS-THAN OR GREATER-THAN}'),
+    ('gtrless', '\N{GREATER-THAN OR LESS-THAN}'),
+    ('prec', '\N{PRECEDES}'),
+    ('succ', '\N{SUCCEEDS}'),
+    ('preceq', '\N{PRECEDES OR EQUAL TO}'),
+    ('succeq', '\N{SUCCEEDS OR EQUAL TO}'),
+    ('precsim', '\N{PRECEDES OR EQUIVALENT TO}'),
+    ('succsim', '\N{SUCCEEDS OR EQUIVALENT TO}'),
+    ('nprec', '\N{DOES NOT PRECEDE}'),
+    ('nsucc', '\N{DOES NOT SUCCEED}'),
+    ('subset', '\N{SUBSET OF}'),
+    ('supset', '\N{SUPERSET OF}'),
+    ('subseteq', '\N{SUBSET OF OR EQUAL TO}'),
+    ('supseteq', '\N{SUPERSET OF OR EQUAL TO}'),
+    ('nsubseteq', '\N{NEITHER A SUBSET OF NOR EQUAL TO}'),
+    ('nsupseteq', '\N{NEITHER A SUPERSET OF NOR EQUAL TO}'),
+    ('subsetneq', '\N{SUBSET OF WITH NOT EQUAL TO}'),
+    ('supsetneq', '\N{SUPERSET OF WITH NOT EQUAL TO}'),
 
 
-    ('cdot', u'\N{MIDDLE DOT}'),
-    ('times', u'\N{MULTIPLICATION SIGN}'),
-    ('otimes', u'\N{CIRCLED TIMES}'),
-    ('oplus', u'\N{CIRCLED PLUS}'),
-    ('bigotimes', u'\N{CIRCLED TIMES}'),
-    ('bigoplus', u'\N{CIRCLED PLUS}'),
+    ('cdot', '\N{MIDDLE DOT}'),
+    ('times', '\N{MULTIPLICATION SIGN}'),
+    ('otimes', '\N{CIRCLED TIMES}'),
+    ('oplus', '\N{CIRCLED PLUS}'),
+    ('bigotimes', '\N{CIRCLED TIMES}'),
+    ('bigoplus', '\N{CIRCLED PLUS}'),
 
     ('frac', '%s/%s'),
     ('nicefrac', '%s/%s'),
@@ -257,44 +257,44 @@ _default_macro_list = [
     ('arctan', 'arctan'),
 
     ('prime', "'"),
-    ('dag', u"\N{DAGGER}"),
-    ('dagger', u"\N{DAGGER}"),
-    ('pm', u"\N{PLUS-MINUS SIGN}"),
-    ('mp', u"\N{MINUS-OR-PLUS SIGN}"),
+    ('dag', "\N{DAGGER}"),
+    ('dagger', "\N{DAGGER}"),
+    ('pm', "\N{PLUS-MINUS SIGN}"),
+    ('mp', "\N{MINUS-OR-PLUS SIGN}"),
 
-    (',', u" "),
-    (';', u" "),
-    (':', u" "),
-    (' ', u" "),
-    ('!', u""), # sorry, no negative space in ascii
-    ('quad', u"  "),
-    ('qquad', u"    "),
+    (',', " "),
+    (';', " "),
+    (':', " "),
+    (' ', " "),
+    ('!', ""), # sorry, no negative space in ascii
+    ('quad', "  "),
+    ('qquad', "    "),
 
-    ('ldots', u"..."),
-    ('cdots', u"..."),
-    ('ddots', u"..."),
-    ('dots', u"..."),
+    ('ldots', "..."),
+    ('cdots', "..."),
+    ('ddots', "..."),
+    ('dots', "..."),
     
-    ('langle', u'\N{LEFT ANGLE BRACKET}'),
-    ('rangle', u'\N{RIGHT ANGLE BRACKET}'),
-    ('mid', u'|'),
-    ('nmid', u'\N{DOES NOT DIVIDE}'),
+    ('langle', '\N{LEFT ANGLE BRACKET}'),
+    ('rangle', '\N{RIGHT ANGLE BRACKET}'),
+    ('mid', '|'),
+    ('nmid', '\N{DOES NOT DIVIDE}'),
     
-    ('ket', u'|%s\N{RIGHT ANGLE BRACKET}'),
-    ('bra', u'\N{LEFT ANGLE BRACKET}%s|'),
-    ('braket', u'\N{LEFT ANGLE BRACKET}%s|%s\N{RIGHT ANGLE BRACKET}'),
-    ('ketbra', u'|%s\N{RIGHT ANGLE BRACKET}\N{LEFT ANGLE BRACKET}%s|'),
-    ('uparrow', u'\N{UPWARDS ARROW}'),
-    ('downarrow', u'\N{DOWNWARDS ARROW}'),
-    ('rightarrow', u'\N{RIGHTWARDS ARROW}'),
-    ('to', u'\N{RIGHTWARDS ARROW}'),
-    ('leftarrow', u'\N{LEFTWARDS ARROW}'),
-    ('longrightarrow', u'\N{LONG RIGHTWARDS ARROW}'),
-    ('longleftarrow', u'\N{LONG LEFTWARDS ARROW}'),
+    ('ket', '|%s\N{RIGHT ANGLE BRACKET}'),
+    ('bra', '\N{LEFT ANGLE BRACKET}%s|'),
+    ('braket', '\N{LEFT ANGLE BRACKET}%s|%s\N{RIGHT ANGLE BRACKET}'),
+    ('ketbra', '|%s\N{RIGHT ANGLE BRACKET}\N{LEFT ANGLE BRACKET}%s|'),
+    ('uparrow', '\N{UPWARDS ARROW}'),
+    ('downarrow', '\N{DOWNWARDS ARROW}'),
+    ('rightarrow', '\N{RIGHTWARDS ARROW}'),
+    ('to', '\N{RIGHTWARDS ARROW}'),
+    ('leftarrow', '\N{LEFTWARDS ARROW}'),
+    ('longrightarrow', '\N{LONG RIGHTWARDS ARROW}'),
+    ('longleftarrow', '\N{LONG LEFTWARDS ARROW}'),
 
     # we use these conventions as Identity operator (\mathbbm{1})
-    ('id', u'\N{MATHEMATICAL DOUBLE-STRUCK CAPITAL I}'),
-    ('Ident', u'\N{MATHEMATICAL DOUBLE-STRUCK CAPITAL I}'),
+    ('id', '\N{MATHEMATICAL DOUBLE-STRUCK CAPITAL I}'),
+    ('Ident', '\N{MATHEMATICAL DOUBLE-STRUCK CAPITAL I}'),
     ];
 
 
@@ -341,44 +341,44 @@ _greekletters( ('alpha', 'beta', 'gamma', 'delta', 'epsilon', 'zeta', 'eta', 'th
                 'lambda', 'mu', 'nu', 'xi', 'omicron', 'pi', 'rho', 'sigma', 'tau', 'upsilon', 'phi',
                 'chi', 'psi', 'omega') )
 _default_macro_list += [
-    ('varepsilon', u'\N{GREEK SMALL LETTER EPSILON}'),
-    ('vartheta', u'\N{GREEK THETA SYMBOL}'),
-    ('varpi', u'\N{GREEK PI SYMBOL}'),
-    ('varrho', u'\N{GREEK RHO SYMBOL}'),
-    ('varsigma', u'\N{GREEK SMALL LETTER FINAL SIGMA}'),
-    ('varphi', u'\N{GREEK SMALL LETTER PHI}'),
+    ('varepsilon', '\N{GREEK SMALL LETTER EPSILON}'),
+    ('vartheta', '\N{GREEK THETA SYMBOL}'),
+    ('varpi', '\N{GREEK PI SYMBOL}'),
+    ('varrho', '\N{GREEK RHO SYMBOL}'),
+    ('varsigma', '\N{GREEK SMALL LETTER FINAL SIGMA}'),
+    ('varphi', '\N{GREEK SMALL LETTER PHI}'),
     ]
 
 unicode_accents_list = (
     # see http://en.wikibooks.org/wiki/LaTeX/Special_Characters for a list
-    ("'", u"\N{COMBINING ACUTE ACCENT}"),
-    ("`", u"\N{COMBINING GRAVE ACCENT}"),
-    ('"', u"\N{COMBINING DIAERESIS}"),
-    ("c", u"\N{COMBINING CEDILLA}"),
-    ("^", u"\N{COMBINING CIRCUMFLEX ACCENT}"),
-    ("~", u"\N{COMBINING TILDE}"),
-    ("H", u"\N{COMBINING DOUBLE ACUTE ACCENT}"),
-    ("k", u"\N{COMBINING OGONEK}"),
-    ("=", u"\N{COMBINING MACRON}"),
-    ("b", u"\N{COMBINING MACRON BELOW}"),
-    (".", u"\N{COMBINING DOT ABOVE}"),
-    ("d", u"\N{COMBINING DOT BELOW}"),
-    ("r", u"\N{COMBINING RING ABOVE}"),
-    ("u", u"\N{COMBINING BREVE}"),
-    ("v", u"\N{COMBINING CARON}"),
+    ("'", "\N{COMBINING ACUTE ACCENT}"),
+    ("`", "\N{COMBINING GRAVE ACCENT}"),
+    ('"', "\N{COMBINING DIAERESIS}"),
+    ("c", "\N{COMBINING CEDILLA}"),
+    ("^", "\N{COMBINING CIRCUMFLEX ACCENT}"),
+    ("~", "\N{COMBINING TILDE}"),
+    ("H", "\N{COMBINING DOUBLE ACUTE ACCENT}"),
+    ("k", "\N{COMBINING OGONEK}"),
+    ("=", "\N{COMBINING MACRON}"),
+    ("b", "\N{COMBINING MACRON BELOW}"),
+    (".", "\N{COMBINING DOT ABOVE}"),
+    ("d", "\N{COMBINING DOT BELOW}"),
+    ("r", "\N{COMBINING RING ABOVE}"),
+    ("u", "\N{COMBINING BREVE}"),
+    ("v", "\N{COMBINING CARON}"),
 
-    ("vec", u"\N{COMBINING RIGHT ARROW ABOVE}"),
-    ("dot", u"\N{COMBINING DOT ABOVE}"),
-    ("hat", u"\N{COMBINING CIRCUMFLEX ACCENT}"),
-    ("check", u"\N{COMBINING CARON}"),
-    ("breve", u"\N{COMBINING BREVE}"),
-    ("acute", u"\N{COMBINING ACUTE ACCENT}"),
-    ("grave", u"\N{COMBINING GRAVE ACCENT}"),
-    ("tilde", u"\N{COMBINING TILDE}"),
-    ("bar", u"\N{COMBINING OVERLINE}"),
-    ("ddot", u"\N{COMBINING DIAERESIS}"),
+    ("vec", "\N{COMBINING RIGHT ARROW ABOVE}"),
+    ("dot", "\N{COMBINING DOT ABOVE}"),
+    ("hat", "\N{COMBINING CIRCUMFLEX ACCENT}"),
+    ("check", "\N{COMBINING CARON}"),
+    ("breve", "\N{COMBINING BREVE}"),
+    ("acute", "\N{COMBINING ACUTE ACCENT}"),
+    ("grave", "\N{COMBINING GRAVE ACCENT}"),
+    ("tilde", "\N{COMBINING TILDE}"),
+    ("bar", "\N{COMBINING OVERLINE}"),
+    ("ddot", "\N{COMBINING DIAERESIS}"),
 
-    ("not", u"\N{COMBINING LONG SOLIDUS OVERLAY}"),
+    ("not", "\N{COMBINING LONG SOLIDUS OVERLAY}"),
 
     );
 
@@ -388,16 +388,16 @@ def make_accented_char(node, combining):
     c = latexnodes2text([nodearg]).strip();
 
     def getaccented(ch, combining):
-        ch = unicode(ch)
-        combining = unicode(combining)
-        if (ch == u"\N{LATIN SMALL LETTER DOTLESS I}"):
-            ch = u"i"
-        if (ch == u"\N{LATIN SMALL LETTER DOTLESS J}"):
-            ch = u"j"
+        ch = str(ch)
+        combining = str(combining)
+        if (ch == "\N{LATIN SMALL LETTER DOTLESS I}"):
+            ch = "i"
+        if (ch == "\N{LATIN SMALL LETTER DOTLESS J}"):
+            ch = "j"
         #print u"Accenting %s with %s"%(ch, combining) # this causes UnicdeDecodeError!!!
-        return unicodedata.normalize('NFC', unicode(ch)+combining)
+        return unicodedata.normalize('NFC', str(ch)+combining)
 
-    return u"".join([getaccented(ch, combining) for ch in c]);
+    return "".join([getaccented(ch, combining) for ch in c]);
 
 
 for u in unicode_accents_list:
@@ -448,7 +448,7 @@ class LatexNodes2Text(object):
         self.keep_comments = flags.pop('keep_comments', False)
         if flags:
             # any flags left which we haven't recognized
-            logger.warning("LatexNodes2Text(): Unknown flag(s) encountered: %r", flags.keys())
+            logger.warning("LatexNodes2Text(): Unknown flag(s) encountered: %r", list(flags.keys()))
         
 
     def set_tex_input_directory(self, tex_input_directory, latex_walker_init_args=None, strict_input=True):
@@ -481,14 +481,14 @@ class LatexNodes2Text(object):
         if not os.path.exists(fnfull) and os.path.exists(fnfull + '.latex'):
             fnfull = fnfull + '.latex'
         if not os.path.isfile(fnfull):
-            logger.warning(u"Error, file doesn't exist: '%s'", fn)
+            logger.warning("Error, file doesn't exist: '%s'", fn)
             return ''
         
         try:
             with open(fnfull) as f:
                 return f.read()
         except IOError as e:
-            logger.warning(u"Error, can't access '%s': %s", fn, e)
+            logger.warning("Error, can't access '%s': %s", fn, e)
             return ''
 
 
@@ -498,7 +498,7 @@ class LatexNodes2Text(object):
         #
         
         if (len(n.nodeargs) != 1):
-            logger.warning(ur"Expected exactly one argument for '\input' ! Got = %r", n.nodeargs)
+            logger.warning(r"Expected exactly one argument for '\input' ! Got = %r", n.nodeargs)
 
         inputtex = self.read_input_file(self.nodelist_to_text([n.nodeargs[0]]).strip())
 
@@ -663,17 +663,17 @@ if __name__ == '__main__':
 
         import fileinput
 
-        print "Please type some latex text (Ctrl+D twice to stop) ..."
+        print("Please type some latex text (Ctrl+D twice to stop) ...")
 
         latex = ''
         for line in fileinput.input():
             latex += line;
 
 
-        print '\n--- WORDS ---\n'
-        print latex2text(latex.decode('utf-8')#, keep_inline_math=True
-                         ).encode('utf-8')
-        print '\n-------------\n'
+        print('\n--- WORDS ---\n')
+        print(latex2text(latex.decode('utf-8')#, keep_inline_math=True
+                         ).encode('utf-8'))
+        print('\n-------------\n')
 
     except:
         import pdb;
@@ -681,7 +681,7 @@ if __name__ == '__main__':
         import sys;
         (exc_type, exc_value, exc_traceback) = sys.exc_info()
         
-        print "\nEXCEPTION: " + unicode(sys.exc_value) + "\n"
+        print("\nEXCEPTION: " + str(sys.exc_info()[1]) + "\n")
         
         pdb.post_mortem()
 

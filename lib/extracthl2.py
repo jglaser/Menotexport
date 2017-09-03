@@ -33,19 +33,20 @@ from pdfminer.layout import LTTextBox, LTTextLine, LTAnno,\
 from numpy import sqrt, argsort
 
 from subprocess import Popen, PIPE
-import tools
+from . import tools
 import time
-import wordfix
+from . import wordfix
 import os
+from functools import reduce
 
 
 #------Test availability of pdftotext-------------
 def checkPdftotext():
     try:
         pp=Popen(['pdftotext'],stdout=PIPE,stderr=PIPE)
-	re=pp.communicate()
-	if '-x' in re[1] and '-y' in re[1]:
-            isavail=True
+        re=pp.communicate()
+        if '-x' in re[1] and '-y' in re[1]:
+                isavail=True
         else:
             isavail=False
     except:
@@ -104,7 +105,7 @@ def findStrFromBox(anno,box,verbose=True):
     Extract text using pdfminer
     '''
 
-    texts=u''
+    texts=''
     num=0
 
     #----------------Loop through annos----------------
@@ -141,7 +142,7 @@ def findStrFromBox(anno,box,verbose=True):
                                 textii.append(charii.get_text())
 
             #----------------Concatenate texts----------------
-            textii=u''.join(textii).strip(' ')
+            textii=''.join(textii).strip(' ')
 
             textii=textii.strip('\n')
             textii=textii.replace('\n',' ')
@@ -149,9 +150,9 @@ def findStrFromBox(anno,box,verbose=True):
             #---------------Join with next line---------------
             if len(texts)>1 and texts[-1]=='-':
                 texts=texts[:-1]
-                joiner=u''
+                joiner=''
             else:
-                joiner=u' '
+                joiner=' '
 
             #---------------Jump---------------
             linegap,chargap=measureGap(lines)
@@ -162,7 +163,7 @@ def findStrFromBox(anno,box,verbose=True):
             else:
                 #lastbox=anno[ii-1]['rect']
                 if checkJump(lastbox, hiibox, lineii,linegap,chargap):
-                    textii=u' ...... '+textii 
+                    textii=' ...... '+textii 
                     texts+=joiner+textii
                 else:
                     texts+=joiner+textii
@@ -188,7 +189,7 @@ def findStrFromBox2(anno,box,filename,pheight,verbose=True):
     '''
 
 
-    texts=u''
+    texts=''
     num=0
     # pdftotext requires int coordinates, scale default dpi of
     # pdftotext (72) to 720, and multiply coordinates by 10.
@@ -223,7 +224,7 @@ def findStrFromBox2(anno,box,filename,pheight,verbose=True):
                             '-x',coord2str(hiibox[0]),'-y',coord2str(pheight-hiibox[3]),\
                             '-W',coord2str(hiibox[2]-hiibox[0]),'-H',coord2str(hiibox[3]-hiibox[1]),\
                             os.path.abspath(filename),'tmp.txt']
-                    args=map(str,args)
+                    args=list(map(str,args))
 
                     pp=Popen(args)
                     while pp.poll() !=0:
@@ -237,7 +238,7 @@ def findStrFromBox2(anno,box,filename,pheight,verbose=True):
                     break
                  
             #----------------Concatenate texts----------------
-            textii=u''.join(textii).strip(' ')
+            textii=''.join(textii).strip(' ')
 
             textii=textii.strip('\n')
             textii=textii.replace('\n',' ')
@@ -245,9 +246,9 @@ def findStrFromBox2(anno,box,filename,pheight,verbose=True):
             #---------------Join with next line---------------
             if len(texts)>1 and texts[-1]=='-':
                 texts=texts[:-1]
-                joiner=u''
+                joiner=''
             else:
-                joiner=u' '
+                joiner=' '
 
             #---------------Jump---------------
             linegap,chargap=measureGap(lines)
@@ -258,7 +259,7 @@ def findStrFromBox2(anno,box,filename,pheight,verbose=True):
             else:
                 #lastbox=anno[ii-1]['rect']
                 if checkJump(lastbox, hiibox, lineii,linegap,chargap):
-                    textii=u' ...... '+textii 
+                    textii=' ...... '+textii 
                     texts+=joiner+textii
                 else:
                     texts+=joiner+textii
@@ -494,7 +495,7 @@ def sortY(objs,verbose=True):
     for ii in objs:
         objdict[-ii.bbox[3],ii.bbox[0]]=ii
 
-    keys=objdict.keys()
+    keys=list(objdict.keys())
     keys=sorted(keys)
 
     result=[objdict[ii] for ii in keys]
@@ -515,7 +516,7 @@ def sortX(objs,verbose=True):
     for ii in objs:
         objdict[ii.bbox[0],-ii.bbox[3]]=ii
 
-    keys=objdict.keys()
+    keys=list(objdict.keys())
     keys=sorted(keys)
 
     result=[objdict[ii] for ii in keys]
@@ -537,7 +538,7 @@ def sortAnnoY(objs,verbose=True):
     for ii in objs:
         objdict[-ii['rect'][3],ii['rect'][0]]=ii
 
-    keys=objdict.keys()
+    keys=list(objdict.keys())
     keys=sorted(keys)
 
     result=[objdict[ii] for ii in keys]

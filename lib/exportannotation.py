@@ -13,8 +13,8 @@ Update time: 2016-04-12 22:09:38.
 
 import os
 from textwrap import TextWrapper
-import tools
-from tools import printHeader, printInd, printNumHeader
+from . import tools
+from .tools import printHeader, printInd, printNumHeader
 
 
 #------------------Export annotations in a single PDF------------------
@@ -62,7 +62,7 @@ def _exportAnnoFile(abpath_out,anno,verbose=True):
     Update time: 2016-02-24 13:59:56.
     '''
 
-    conv=lambda x:unicode(x)
+    conv=lambda x:str(x)
 
     wrapper=TextWrapper()
     wrapper.width=80
@@ -84,7 +84,7 @@ def _exportAnnoFile(abpath_out,anno,verbose=True):
     except:
         titleii=ntii[0].title
 
-    outstr=u'\n\n{0}\n# {1}'.format(int(80)*'-',conv(titleii))
+    outstr='\n\n{0}\n# {1}'.format(int(80)*'-',conv(titleii))
 
     with open(abpath_out, mode='a') as fout:
         #outstr=outstr.encode('ascii','replace')
@@ -99,14 +99,14 @@ def _exportAnnoFile(abpath_out,anno,verbose=True):
                 hlstr=wrapper.fill(hljj.text)
                 tagstr=', '.join(['@'+kk for kk in hljj.tags])
                 tagstr=wrapper2.fill(tagstr)
-                outstr=u'''
+                outstr='''
 \n\t> {0}
 
 \t\t- @{1}
 \t\t- Tags: {2}
 \t\t- Ctime: {3}
-'''.format(*map(conv,[hlstr, hljj.citationkey,\
-    tagstr, hljj.ctime]))
+'''.format(*list(map(conv,[hlstr, hljj.citationkey,\
+    tagstr, hljj.ctime])))
 
                 #outstr=outstr.encode('ascii','replace')
                 outstr=outstr.encode('utf8','replace')
@@ -120,14 +120,14 @@ def _exportAnnoFile(abpath_out,anno,verbose=True):
                 ntstr=wrapper.fill(ntjj.text)
                 tagstr=', '.join(['@'+kk for kk in ntjj.tags])
                 tagstr=wrapper2.fill(tagstr)
-                outstr=u'''
+                outstr='''
 \n\t- {0}
 
 \t\t- @{1}
 \t\t- Tags: {2}
 \t\t- Ctime: {3}
-'''.format(*map(conv,[ntstr, ntjj.citationkey,\
-    tagstr, ntjj.ctime]))
+'''.format(*list(map(conv,[ntstr, ntjj.citationkey,\
+    tagstr, ntjj.ctime])))
 
                 #outstr=outstr.encode('ascii','replace')
                 outstr=outstr.encode('utf8','replace')
@@ -174,7 +174,7 @@ def exportAnno(annodict,outdir,action,separate,verbose=True):
     annofaillist=[]
 
     num=len(annodict)
-    docids=annodict.keys()
+    docids=list(annodict.keys())
 
     for ii,idii in enumerate(docids):
 

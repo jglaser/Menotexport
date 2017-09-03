@@ -293,10 +293,10 @@ class LatexToken(object):
 
     def __repr__(self):
         return (
-            u"LatexToken(" +
-            u", ".join([ u"%s=%r"%(k,getattr(self,k))
+            "LatexToken(" +
+            ", ".join([ "%s=%r"%(k,getattr(self,k))
                         for k in self._fields ]) +
-            u")"
+            ")"
             )
 
     def __str__(self):
@@ -348,9 +348,9 @@ class LatexNode(object):
         return self.__unicode__().encode('utf-8')
     def __repr__(self):
         return (
-            self.nodeType().__name__ + u"(" +
-            u", ".join([ u"%s=%r"%(k,getattr(self,k))  for k in self._fields ]) +
-            u")"
+            self.nodeType().__name__ + "(" +
+            ", ".join([ "%s=%r"%(k,getattr(self,k))  for k in self._fields ]) +
+            ")"
             )
 
 
@@ -528,7 +528,7 @@ class LatexWalker(object):
         self.strict_braces = flags.pop('strict_braces', False)
         if flags:
             # any flags left which we haven't recognized
-            logger.warning("LatexWalker(): Unknown flag(s) encountered: %r", flags.keys())
+            logger.warning("LatexWalker(): Unknown flag(s) encountered: %r", list(flags.keys()))
 
     def parse_flags(self):
         return {
@@ -920,7 +920,7 @@ class LatexWalker(object):
                     if (mac.optarg):
                         (nodeoptarg, p.pos) = getoptarg(p.pos);
 
-                    if (isinstance(mac.numargs, basestring)):
+                    if (isinstance(mac.numargs, str)):
                         # specific argument specification
                         for arg in mac.numargs:
                             if (arg == '{'):
@@ -1140,7 +1140,7 @@ def nodelist_to_latex(nodelist):
                 latex += '[%s]' %(nodelist_to_latex([n.nodeoptarg]));
 
             if mac is not None:
-                macbraces = (mac.numargs if isinstance(mac.numargs, basestring) else '{'*mac.numargs);
+                macbraces = (mac.numargs if isinstance(mac.numargs, str) else '{'*mac.numargs);
             else:
                 macbraces = '{'*len(n.nodeargs);
                 
@@ -1223,9 +1223,9 @@ def disp_node(n, indent=0, context='* ', skip_group=False):
         title = '\\begin{%s}' %(n.envname)
         iterchildren.append(('* ', n.nodelist, False));
     else:
-        print "UNKNOWN NODE TYPE: %s"%(n.nodeType().__name__)
+        print("UNKNOWN NODE TYPE: %s"%(n.nodeType().__name__))
 
-    print ' '*indent + context + title + '  '+comment
+    print(' '*indent + context + title + '  '+comment)
 
     for context, nodelist, skip in iterchildren:
         for nn in nodelist:
@@ -1252,18 +1252,18 @@ if __name__ == '__main__':
 
         (nodes, pos, llen) = get_latex_nodes(latex);
 
-        print '\n--- NODES ---\n'
-        print repr(nodes);
-        print '\n-------------\n'
+        print('\n--- NODES ---\n')
+        print(repr(nodes));
+        print('\n-------------\n')
 
-        print '\n--- NODES ---\n'
+        print('\n--- NODES ---\n')
         for n in nodes:
             disp_node(n)
-        print '\n-------------\n'
+        print('\n-------------\n')
 
     except:
         import pdb;
         import sys;
-        print "\nEXCEPTION: " + unicode(sys.exc_info()[1]) + "\n"
+        print("\nEXCEPTION: " + str(sys.exc_info()[1]) + "\n")
         pdb.post_mortem()
 

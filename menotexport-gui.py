@@ -27,11 +27,11 @@ Update time: 2016-06-22 16:48:56.
 
 
 import sys,os
-from ttk import Style,Combobox
-from tkFileDialog import askopenfilename, askdirectory
-import tkMessageBox
+from tkinter.ttk import Style,Combobox
+from tkinter.filedialog import askopenfilename, askdirectory
+import tkinter.messagebox
 import menotexport
-import Queue
+import queue
 import threading
 import sqlite3
 import pandas as pd
@@ -39,8 +39,8 @@ if sys.version_info[0]>=3:
     import tkinter as tk
     from tkinter import Frame
 else:
-    import Tkinter as tk
-    from Tkinter import Frame
+    import tkinter as tk
+    from tkinter import Frame
 
 
 stdout=sys.stdout
@@ -103,7 +103,7 @@ class MainFrame(Frame):
         self.message_frame=self.addMessageFrame()
         self.printStr()
 
-        self.stateq=Queue.Queue()
+        self.stateq=queue.Queue()
         #self.workproc=Pool(1)
 
 
@@ -134,7 +134,7 @@ class MainFrame(Frame):
                 self.text.update()
                 self.text.insert(tk.END,msg)
                 self.text.see(tk.END)
-            except Queue.Empty:
+            except queue.Empty:
                 pass
         self.after(100,self.printStr)
 
@@ -175,7 +175,7 @@ class MainFrame(Frame):
 Default location on Linux:
 ~/.local/share/data/Mendeley\ Ltd./Mendeley\ Desktop/your_email@www.mendeley.com.sqlite
 Default location on Windows:
-C:\Users\Your_name\AppData\Local\Mendeley Ltd\Mendeley Desktop\your_email@www.mendeley.com.sqlite'''
+C:\\Users\Your_name\AppData\Local\Mendeley Ltd\Mendeley Desktop\your_email@www.mendeley.com.sqlite'''
 
         hint_label=tk.Label(frame,text=hint,\
                 justify=tk.LEFT,anchor=tk.NW)
@@ -200,7 +200,7 @@ C:\Users\Your_name\AppData\Local\Mendeley Ltd\Mendeley Desktop\your_email@www.me
         dirname=askdirectory()
         self.out_entry.insert(tk.END,dirname)
         if len(dirname)>0:
-            print('# <Menotexport>: Output folder: %s' %dirname)
+            print(('# <Menotexport>: Output folder: %s' %dirname))
             self.hasout=True
             self.checkReady()
 
@@ -216,7 +216,7 @@ C:\Users\Your_name\AppData\Local\Mendeley Ltd\Mendeley Desktop\your_email@www.me
             filename=askopenfilename(filetypes=ftypes)
         self.db_entry.insert(tk.END,filename)
         if len(filename)>0:
-            print('# <Menotexport>: Database file: %s' %filename)
+            print(('# <Menotexport>: Database file: %s' %filename))
             self.probeFolders()
 
 
@@ -348,7 +348,7 @@ C:\Users\Your_name\AppData\Local\Mendeley Ltd\Mendeley Desktop\your_email@www.me
         if self.menfolder=='All':
             print('# <Menotexport>: Work on all folders.')
         else:
-            print('# <Menotexport>: Select Mendeley folder: '+str(self.menfolder))
+            print(('# <Menotexport>: Select Mendeley folder: '+str(self.menfolder)))
 
 
 
@@ -430,7 +430,7 @@ C:\Users\Your_name\AppData\Local\Mendeley Ltd\Mendeley Desktop\your_email@www.me
 - See README.md for more info.\n
 ''' %self.title
 
-        tkMessageBox.showinfo(title='Help', message=helpstr)
+        tkinter.messagebox.showinfo(title='Help', message=helpstr)
         #print(self.menfolder.get())
 
 
@@ -466,7 +466,6 @@ C:\Users\Your_name\AppData\Local\Mendeley Ltd\Mendeley Desktop\your_email@www.me
         else:
             iszotero=False
 
-            
         if 'p' in action or 'm' in action or 'n' in action or 'b' in action or 'r' in action:
             self.db_button.configure(state=tk.DISABLED)
             self.out_button.configure(state=tk.DISABLED)
@@ -480,7 +479,7 @@ C:\Users\Your_name\AppData\Local\Mendeley Ltd\Mendeley Desktop\your_email@www.me
             self.check_ris.configure(state=tk.DISABLED)
             self.check_separate.configure(state=tk.DISABLED)
             self.check_iszotero.configure(state=tk.DISABLED)
-	    self.messagelabel.configure(text='Message (working...)')
+            self.messagelabel.configure(text='Message (working...)')
 
             folder=None if self.menfolder=='All' else folder_sel
 
@@ -518,7 +517,7 @@ C:\Users\Your_name\AppData\Local\Mendeley Ltd\Mendeley Desktop\your_email@www.me
                     self.check_iszotero.configure(state=tk.NORMAL)
                     self.messagelabel.configure(text='Message')
                     return
-            except Queue.Empty:
+            except queue.Empty:
                 pass
         self.after(100,self.reset)
 
@@ -553,7 +552,7 @@ C:\Users\Your_name\AppData\Local\Mendeley Ltd\Mendeley Desktop\your_email@www.me
 
 def main():
 
-    stdoutq=Queue.Queue()
+    stdoutq=queue.Queue()
     sys.stdout=Redirector(stdoutq)
 
     root=tk.Tk()

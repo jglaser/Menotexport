@@ -13,9 +13,9 @@ Update time: 2016-06-23 08:37:36.
 
 import os
 import platform
-import tools
+from . import tools
 import re
-from pylatexenc import latexencode
+from .pylatexenc import latexencode
 
 
 TYPE_DICT={'Report': 'RPRT',\
@@ -127,7 +127,7 @@ def parseMeta(metadict,basedir,isfile,iszotero,verbose=True):
     for ii in authors:
         entries.append('AU - %s' %ii)
     #authors=latexencode.utf8tolatex(authors)
-    
+
     #---------------------Get time---------------------
     year=getField(metadict,'year','')
     month=getField(metadict,'month','')
@@ -141,7 +141,7 @@ def parseMeta(metadict,basedir,isfile,iszotero,verbose=True):
             ii=''
         time.append(ii)
     if year!='':
-	entries.append('PY - %s' %time[0])
+       entries.append('PY - %s' %time[0])
     time='%s/%s/%s/' %(time[0],time[1],time[2])
     entries.append('DA - %s' %time)
     entries.append('Y1 - %s' %time)
@@ -160,20 +160,20 @@ def parseMeta(metadict,basedir,isfile,iszotero,verbose=True):
             entries.append('EP - %s' %tools.deu(pmatch.group(2)))
 
     #-----------------Get city/country-----------------
-    loc=u''
+    loc=''
     city=getField(metadict,'city','')
     country=getField(metadict,'country','')
     if city!='':
-        loc=u'%s, %s' %(loc,city)
+        loc='%s, %s' %(loc,city)
     if country!='':
-        loc=u'%s, %s' %(loc,country)
+        loc='%s, %s' %(loc,country)
     if len(loc)>0:
         entries.append('CY - %s' %loc)
 
     #--------------Populate other fields--------------
     gotkeywords=False
 
-    for kk,vv in metadict.items():
+    for kk,vv in list(metadict.items()):
         if vv is None:
             continue
         if kk in ['type','firstnames','lastname','docid','year','month',\
@@ -197,16 +197,16 @@ def parseMeta(metadict,basedir,isfile,iszotero,verbose=True):
             if type(tags) is not list:
                 tags=[tags,]
             keywords.extend(tags)
-	    keywords=list(set(keywords))
+            keywords=list(set(keywords))
             kk='keywords'
             vv=keywords
             gotkeywords=True
 
-	#-----------Specifiy issn and isbn-----------------
-	if kk.lower()=='issn':
-	    vv='issn %s' %vv
-	if kk.lower()=='isbn':
-	    vv='isbn %s' %vv
+        #-----------Specifiy issn and isbn-----------------
+        if kk.lower()=='issn':
+            vv='issn %s' %vv
+        if kk.lower()=='isbn':
+            vv='isbn %s' %vv
 
         #--------------------All others--------------------
         kk=KEYWORD_DICT.get(kk,None)
@@ -239,7 +239,7 @@ def exportAnno2Ris(annodict,basedir,outdir,allfolders,isfile,iszotero,verbose=Tr
     #----------------Loop through docs----------------
     doclist=[]
 
-    for idii,annoii in annodict.items():
+    for idii,annoii in list(annodict.items()):
         metaii=annoii.meta
         hlii=annoii.highlights
         ntii=annoii.notes

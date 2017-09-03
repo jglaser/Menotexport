@@ -15,7 +15,7 @@ def deu(text):
         return text
 
 def enu(text):
-    if isinstance(text,unicode):
+    if isinstance(text,str):
         return text.encode('utf8','replace')
     else:
         return text
@@ -44,14 +44,14 @@ def printHeader(s, level=1, length=70, prefix='# <Menotexport>:'):
 
     #----------------------Print----------------------
     try:
-        print('\n'+hline)
+        print(('\n'+hline))
     except:
-        print('\n'+hline.encode('ascii','replace'))
+        print(('\n'+hline.encode('ascii','replace')))
     for ss in strings:
         try:
             print(ss)
         except:
-            print(ss.encode('ascii','replace'))
+            print((ss.encode('ascii','replace')))
     #print(hline)
 
     return
@@ -83,14 +83,14 @@ def printNumHeader(s, idx, num, level=1, length=70, prefix='# <Menotexport>:'):
 
     #----------------------Print----------------------
     try:
-        print('\n'+hline1)
+        print(('\n'+hline1))
     except:
-        print('\n'+hline1.encode('ascii','replace'))
+        print(('\n'+hline1.encode('ascii','replace')))
     for ss in strings:
         try:
             print(ss)
         except:
-            print(ss.encode('ascii','replace'))
+            print((ss.encode('ascii','replace')))
     #print(hline2)
 
     return
@@ -110,9 +110,9 @@ def printInd(s, level=1, length=70, prefix=''):
 
     string=wrapper.fill('%s %s' %(prefix,s))
     try:
-        print('\n'+string)
+        print(('\n'+string))
     except:
-        print('\n'+string.encode('ascii','replace'))
+        print(('\n'+string.encode('ascii','replace')))
 
     return 
 
@@ -137,7 +137,7 @@ def readFile(abpath_in,verbose=True):
     with open(abpath_in, 'r') as fin:
         for line in fin:
             lines.append(deu(line))
-    lines=u''.join(lines)
+    lines=''.join(lines)
 
     if verbose:
         print('# <readFile>: Got all data.')
